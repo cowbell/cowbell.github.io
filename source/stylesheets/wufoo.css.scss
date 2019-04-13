@@ -1,0 +1,97 @@
+// Core variables and mixins
+@import "bootstrap/variables";
+@import "variables";
+@import "bootstrap/mixins";
+
+// Reset
+@import "bootstrap/normalize";
+
+// Core CSS
+@import "bootstrap/scaffolding";
+@import "bootstrap/type";
+@import "bootstrap/forms";
+@import "bootstrap/buttons";
+
+html.embed,
+body {
+    background-color: transparent;
+}
+
+a {
+    color: $brand-primary;
+}
+
+a:hover {
+  text-decoration: none !important;
+}
+
+#header,
+#errorLi,
+.instruct {
+    display: none;
+}
+
+form {
+    font-family: $font-family-sans-serif !important;
+    font-size: 16px !important;
+
+    li {
+        padding: 0 !important;
+    }
+
+    li.focused,
+    li.error {
+        background: none !important;
+    }
+
+    #saveForm {
+        @include button-variant(#ffffff, $brand-success, #6c981f);
+        @include button-size(6px, 12px, 16px, 1.42857143, 4px);
+        border: none;
+    }
+
+    #fo1li6 {
+        div {
+            padding: 0 !important;
+        }
+    }
+
+    #fo1li1 {
+        margin-bottom: 15px;
+        width: 100% !important;
+        label {
+            float: none;
+        }
+        div {
+            width: 100% !important;
+        }
+        #Field1 {
+            width: 100% !important;
+            padding: 6px;
+            height: 180px;
+        }
+    }
+
+    #fo1li4 {
+        margin-bottom: 15px;
+        width: 100% !important;
+        label {
+            float: none;
+        }
+        div {
+            width: 100% !important;
+        }
+        #Field4 {
+            padding: 6px;
+            width: 100% !important;
+        }
+    }
+
+    .buttons {
+        div {
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+    }
+}

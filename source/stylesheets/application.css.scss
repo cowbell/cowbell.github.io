@@ -1,0 +1,342 @@
+@import "custom-bootstrap";
+
+body {
+    padding-top: 65px;
+    background: url("/images/pattern/cream_dust.png");
+
+    @media (max-width: $screen-xs-max) {
+        font-size: 14px;
+    }
+    @media (min-width: $screen-sm) and (max-width: $screen-sm-max) {
+        font-size: 14px;
+    }
+    @media (min-width: $screen-md) and (max-width: $screen-md-max) {
+        font-size: 15px;
+    }
+}
+
+a:hover {
+  text-decoration: none !important;
+}
+
+.title {
+    text-align: center;
+    margin: 10px 0 60px 0;
+    font-size: 36px;
+    font-weight: bold
+}
+
+.social {
+    a {
+        color: $link-color;
+        cursor: pointer;
+        margin: 0 8px;
+        font-size: 1.6em;
+        transition: color .2s;
+    }
+    a:hover {
+        color: #404040;
+    }
+}
+
+.img-thumbnail {
+    padding: 10px;
+}
+
+.logo path {
+    fill: none;
+    stroke: $brand-primary;
+    stroke-width: 5;
+}
+
+.navbar {
+    margin-bottom: 0;
+    border-bottom: 5px solid $brand-primary;
+    background: url("/images/pattern/groovepaper.png");
+    box-shadow: inset rgba(0,0,0,.6) 0 3px 3px -3px, rgba(0,0,0,.3) 0 3px 5px;
+}
+
+.navbar-brand {
+    font: 28px/60px OpenSans, sans-serif;
+    font-weight: bold;
+}
+
+.navbar-brand:hover .logo path {
+    stroke: darken($brand-primary, 10%);
+}
+
+.navbar-nav {
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.navbar-toggle {
+    background-color: $brand-primary;
+}
+
+section {
+    padding: 60px 20px 40px;
+}
+
+#home {
+    background: #444;
+    text-align: center;
+    h2 {
+        color: white;
+        font: 3.6em/1 OpenSans, sans-serif;
+        font-weight: 600;
+        margin-bottom: 1em;
+        text-shadow: #000 0 -1px 0;
+        color: #c8c8c8;
+        strong {
+            color: #fff
+        }
+    }
+
+    h3 {
+        color: white;
+        font: 2.4em/1.2 OpenSans, sans-serif;
+        font-weight: 600;
+        color: #909090;
+        text-shadow: #000 0 -1px 0;
+    }
+
+    .btn {
+        font-size: 2em;
+        padding: .6em 1.8em;
+        margin: 40px 0
+    }
+}
+
+#service {
+    .ico-service {
+        font-size: 8em;
+        color: $brand-primary;
+    }
+
+    h2 {
+        margin: 30px 0;
+        font-size: 1.7em;
+    }
+}
+
+#quote {
+    text-align: center;
+    font: 1.25em OpenSans, sans-serif;
+    font-style: italic;
+
+    .title {
+        font-size: 3.6em;
+        color: $brand-primary;
+    }
+
+    .quote {
+        margin: 60px 0;
+        line-height: 1.5em
+    }
+
+    .signature {
+        color: $brand-primary;
+        margin-top: 20px;
+    }
+
+    img {
+        border: 3px solid lighten($brand-primary, 20%);
+    }
+}
+
+#work {
+    background: #e8e8e8;
+    box-shadow: inset rgba(0,0,0,.2) 0 3px 5px -3px, inset rgba(0,0,0,.2) 0 -3px 5px -3px;
+
+    .thumb {
+        margin-bottom: 60px;
+    }
+
+    h4 {
+        font-size: 1.4em;
+        margin: 20px 0;
+    }
+
+    h4 a {
+        color: $gray-dark;
+    }
+    p {
+        line-height: 1.5em
+    }
+}
+
+#about {
+    background: #e8e8e8;
+    text-align: center;
+    box-shadow: inset rgba(0,0,0,.2) 0 3px 5px -3px, inset rgba(0,0,0,.2) 0 -3px 5px -3px;
+
+    .figure {
+        margin-bottom: 40px;
+        text-align: center;
+    }
+    h4 {
+        margin: 20px 0;
+        font-size: 1.4em;
+    }
+
+    .social {
+        margin-bottom: 20px;
+    }
+    p {
+        line-height: 1.5em;
+    }
+    .title {
+        border-color: lighten($link-color, 5%);
+    }
+}
+
+#article {
+    padding-top: 0;
+    background: none;
+
+    header {
+        margin: 40px 0 40px 0;
+
+        h1 {
+            font-size: 25px;
+        }
+
+        a,
+        a:hover {
+            color: $gray-dark;
+        }
+    }
+
+    article {
+        margin: 40px 0 80px 0;
+
+        p {
+            margin: 25px 0;
+        }
+
+        code,
+        pre {
+            font-family: Inconsolata;
+            font-size: 16px;
+        }
+
+        footer {
+            font-style: italic;
+        }
+    }
+
+    .jumbotron {
+        margin-top: 80px;
+
+        h1 {
+            line-height: 72px;
+            margin: 0;
+        }
+
+        p {
+            margin: 25px 0;
+        }
+    }
+}
+
+#community {
+    .community {
+        margin-bottom: 40px;
+        text-align: center;
+        h2 {
+            margin: 20px 0;
+        }
+        p {
+            line-height: 1.5em
+        }
+    }
+    .osi {
+        path {
+            fill: $brand-primary;
+            stroke: $brand-primary;
+            stroke-width: 5;
+        }
+    }
+
+    .ruby {
+        path {
+            fill: none;
+            stroke: $brand-primary;
+            stroke-width: 5;
+            stroke-linejoin: round;
+        }
+    }
+
+    .javascript {
+        path {
+            fill: $brand-primary;
+        }
+        path:nth-child(2) {
+            fill: lighten($brand-primary, 15%);
+        }
+        polygon {
+            fill: white;
+        }
+    }
+}
+
+#contact {
+    background: #e8e8e8;
+    text-align: center;
+    box-shadow: inset rgba(0,0,0,.2) 0 3px 5px -3px;
+}
+
+body > footer {
+    background: $gray-dark;
+    color: $gray-light;
+    line-height: 80px;
+    box-shadow: inset rgba(0,0,0,.7) 0 3px 5px -3px;
+    overflow: hidden;
+
+    small {
+        font-size: 14px
+    }
+
+    .footer-logo {
+        svg path {
+            fill: #999;
+        }
+        svg:hover path {
+            fill: #fff;
+        }
+    }
+
+    .social {
+        a {
+            color: #999;
+            color: rgba(255,255,255,.6);
+        }
+        a:hover {
+            color: #fff;
+        }
+    }
+}
+
+@media (min-width: $screen-md-min) {
+    .navbar-nav > li > a {
+        padding-top: 19px;
+        padding-bottom: 19px;
+    }
+
+    #article {
+        header {
+            margin: 80px 0 40px 0;
+
+            h1 {
+                font-size: 41px;
+            }
+        }
+
+        article {
+            pre {
+                font-size: 15px;
+            }
+        }
+    }
+}

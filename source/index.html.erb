@@ -1,0 +1,201 @@
+---
+title: Cowbell Labs - Ruby on Rails and JavaScript Development Experts
+description: Cowbell Labs is a Ruby on Rails and JavaScript development agency that specializes in web and mobile applications.
+---
+<section id="home">
+  <div class="container">
+    <h2>
+      We build <strong>web</strong> and <strong>mobile</strong> applications
+    </h2>
+    <a href="/#contact" class="btn btn-success btn-lg smooth">Get in touch</a>
+  </div>
+</section>
+
+<section id="service">
+  <div class="container">
+    <div class="row">
+      <div>
+        <div class="col-md-4 text-center">
+          <div class="ico-service"><i class="icon-rocket"></i></div>
+          <h2>Rapid Development</h2>
+          <p>
+            Our team is highly experienced in creating and maintaining <strong>Ruby on Rails</strong> applications in <strong>agile</strong> way. Taking the best from both, we are able to rapidly implement your ideas &#8212; from <strong>prototypes</strong> and <strong><abbr title="Minimum Viable Product">MVP</abbr>s</strong> to large scale applications.
+          </p>
+        </div>
+        <div class="col-md-4 text-center">
+          <div class="ico-service"><i class="icon-tablet"></i></div>
+          <h2>Single Page Applications</h2>
+          <p>
+            We have practical knowledge of building single page applications using <strong>Ember</strong>, <strong>AngularJS</strong>, <strong>Backbone</strong> and <strong>YUI</strong>. We focus on bringing the best user experience in every part of your application.
+          </p>
+        </div>
+        <div class="col-md-4 text-center">
+          <div class="ico-service"><i class="icon-retweet"></i></div>
+          <h2>Real Time Web</h2>
+          <p>
+            Sometimes it is important for you to have incoming data, like chat messages or notifications, available instantly in your application. We take advantage of the latest web technologies like <strong>WebSockets</strong> and <strong>Server-Sent Events</strong> to update crucial information in real-time.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="container">
+    <h3 class="title">We Have Enjoyed Working On</h3>
+
+    <div class="row">
+      <% data.projects.each do |project| %>
+        <div class="col-md-4">
+          <div class="thumb text-center">
+            <% if project.url.present? %>
+              <%= link_to image_tag("/images/projects/#{project.slug}.png", class: "img-thumbnail", alt: project.name), project.url %>
+            <% else %>
+              <%= image_tag "/images/projects/#{project.slug}.png", class: "img-thumbnail", alt: project.name %>
+            <% end %>
+
+            <h4>
+              <% if project.url.present? %>
+                <%= link_to project.name, project.url %>
+              <% else %>
+                <%= project.name %>
+              <% end %>
+            </h4>
+
+            <p><%= project.description %></p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<section id="quote">
+  <div class="container">
+    <div class="text-center title">
+      <i class="icon-quote-left"></i>
+    </div>
+
+    <% data.testimonials.each.with_index do |testimonial, i| %>
+      <div class="quote">
+        <p class="text text-center"><%= testimonial.text %></p>
+        <p class="signature text-right">
+          <%= testimonial.signature %>
+          &nbsp;
+          <img src="/images/testimonials/<%= testimonial.image %>" class="img-circle" width="75">
+        </p>
+      </div>
+    <% end %>
+  </div>
+</section>
+
+<section id="about">
+  <div class="container">
+
+    <h3 class="title">Who We Are</h3>
+
+    <div class="row">
+      <% data.people.each do |person| %>
+        <div class="col-md-4 figure">
+          <% if person.github.present? %>
+            <a href="https://github.com/<%= person.github %>">
+              <%= image_tag "/images/team/#{person.slug}.png", class: "img-thumbnail", alt: person.name %>
+            </a>
+          <% else %>
+            <%= image_tag "/images/team/#{person.slug}.png", class: "img-thumbnail", alt: person.name %>
+          <% end %>
+          <h4><%= person.name %></h4>
+          <p class="social">
+            <% if person.github.present? %>
+              <a href="https://github.com/<%= person.github %>"><i class="icon-github"></i></a>
+            <% end %>
+            <% if person.twitter.present? %>
+              <a href="https://twitter.com/<%= person.twitter %>"><i class="icon-twitter"></i></a>
+            <% end %>
+            <% if person.url.present? %>
+              <a href="<%= person.url %>"><i class="icon-globe"></i></a>
+            <% end %>
+          </p>
+          <p><%= person.description %></p>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+</section>
+
+<section id="community">
+  <div class="container">
+    <h3 class="title">Community</h3>
+
+    <div class="row">
+      <div class="col-md-4 community">
+        <svg class="osi" width="133" height="133">
+          <g transform="scale(0.1)">
+            <path d="M 658.68229,3.2406925 C 296.74257,3.2406925 3.2406925,296.74257 3.2406925,658.68229 c 0,280.87073 176.8360275,520.63281 425.3250975,613.64401 L 579.45056,869.73724 C 494.24775,837.58524 433.3886,755.13831 433.3886,658.68229 c 0,-124.47419 100.8195,-225.29369 225.29369,-225.29369 124.47419,0 225.2937,100.8195 225.2937,225.29369 0,96.45602 -60.85916,178.90295 -146.29163,211.05495 L 888.79879,1272.3263 C 1137.2879,1179.3151 1314.1239,939.55302 1314.1239,658.68229 1314.1239,296.74257 1020.622,3.2406925 658.68229,3.2406925" />
+          </g>
+        </svg>
+        <h2>Open Source</h2>
+        <p>
+          We love contributing back to open source projects like
+          <strong>Ruby on Rails</strong>,
+          <strong>Foreman</strong>,
+          <strong>Factory Girl</strong>,
+          <strong>Liquid</strong>,
+          <strong>Resque</strong>,
+          <strong>three.js</strong>
+          and many more…
+        </p>
+      </div>
+      <div class="col-md-4 community">
+        <svg class="ruby" width="133" height="133">
+          <g transform="translate(-75,-65)">
+            <path d="m 80,112.36218 c 6.666667,-10 13.333333,-19.999998 20,-29.999997 6.66667,9.999999 13.33333,19.999997 20,29.999997 6.66667,-10 13.33333,-19.999998 20,-29.999997 6.66667,9.999999 13.33333,19.999997 20,29.999997 6.66667,-10 13.33333,-19.999998 20,-29.999997 6.66667,9.999999 13.33333,19.999997 20,29.999997 -20,23.33333 -40,46.66667 -60,70 -20,-23.33333 -40,-46.66667 -60,-70 z" />
+            <path d="m 80,112.36218 c 40,0 80,0 120,0" />
+            <path d="m 120,112.36218 c 6.66667,23.33333 13.33333,46.66667 20,70 6.66667,-23.33333 13.33333,-46.66667 20,-70" />
+            <path d="m 100,82.362183 c 26.66667,0 53.33333,0 80,0" />
+          </g>
+        </svg>
+
+        <h2>Ruby</h2>
+        <p>
+          We have organized several <a href="http://srug.pl/">Silesian
+          Ruby User Group</a> meetings.
+        </p>
+      </div>
+      <div class="col-md-4 community">
+        <svg class="javascript" width="133" height="133">
+          <g transform="scale(0.3) translate(-200,-20)">
+            <path d="M 286.922,401.662 257.25,68.756 h 326.391 l -29.672,332.906 -133.885,37.633" />
+            <path d="M 420.807,412.832 528.639,383.159 553.969,98.018 H 420.807 v 314.814 z" />
+            <path d="M 549.346,153.902" />
+            <polygon points="407.247,358.362 407.247,140.576 375.665,140.576 375.665,311.462 312.498,293.866 312.498,331.972 " />
+            <polygon points="498.461,270.466 496.805,303.403 433.639,320.169 433.639,358.273 521.762,335.195 530.045,229.17 465.221,237.16 465.221,178.682 534.186,178.682 537.5,140.576 433.639,140.576 433.639,282.064 " />
+          </g>
+        </svg>
+        <h2>JavaScript</h2>
+        <p>
+          In 2013 we launched
+          local <a href="https://www.facebook.com/meetjspl">meet.js</a>
+          meet ups in Silesia.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-offset-3 col-md-6">
+        <h3 class="title">Contact Us</h3>
+        <iframe height="425" allowTransparency="true" frameborder="0" scrolling="no" style="width:100%; border:none" src="//cowbelllabs.wufoo.com/embed/z7x4m1/">
+          <a href="//cowbelllabs.wufoo.com/forms/z7x4m1/">Fill out a form</a>
+          or
+          <a href="mailto:contact@cowbell-labs.com">contact us directly at contact@cowbell-labs.com</a>.
+        </iframe>
+      </div>
+    </div>
+  </div>
+</section>

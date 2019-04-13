@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title><%= current_page.data.title || "Cowbell Labs" %></title>
+
+    <meta content="<%= current_page.data.description %>" name="description">
+    <meta content="ruby, ruby on rails, javascript, development, single page applications, real time, mobile app" name="keywords">
+
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
+
+    <link href="/feed.xml" rel="alternate" type="application/atom+xml" title="Cowbell Labs - Blog">
+    <link href="/favicon.ico" rel="shortcut icon">
+    <link rel="stylesheet" href="/stylesheets/application.css">
+    <link rel="stylesheet" href="/stylesheets/syntax.css">
+
+    <!--[if lt IE 9]>
+      <script src="/javascripts/ie.js"></script>
+    <![endif]-->
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-41889586-1', 'cowbell-labs.com');
+      ga('send', 'pageview');
+    </script>
+  </head>
+
+  <body id="article">
+    <div class="wrap">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-8">
+            <header>
+              <h1>
+                <%= link_to current_page.title, current_page.url %>
+              </h1>
+
+              <div class="timestamp">
+                <em class="text-muted">
+                  Published by <%= current_page.data.author %> on
+                  <time datetime="<%= current_page.date.to_s %>">
+                    <%= current_page.date.strftime("%A, %B %d, %Y") %>
+                  </time>
+                </em>
+              </div>
+            </header>
+
+            <article>
+              <%= yield %>
+
+              <% if current_page.data.hacker_news_id %>
+                <hr>
+                <footer>
+                  Discuss the article on <a href="https://news.ycombinator.com/item?id=<%= current_page.data.hacker_news_id %>">Hacker News</a>
+                </footer>
+              <% end %>
+            </article>
+          </div>
+
+          <div class="col-md-4">
+            <div class="jumbotron">
+              <svg class="logo pull-left" width="56" height="72">
+                <g transform="translate(0,11)"><%= partial "shared/logo" %></g>
+              </svg>
+
+              <h1>Hello</h1>
+
+              <div class="clearfix"></div>
+              <p>We are Cowbell Labs - team of Ruby on Rails and JavaScript experts</p>
+              <%= link_to "Learn more", "/", class: "btn btn-lg btn-success" %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="push"></div>
+    </div>
+
+    <%= partial "shared/footer" %>
+  </body>
+</html>

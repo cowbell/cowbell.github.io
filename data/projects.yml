@@ -1,0 +1,29 @@
+- slug: "tiramizoo"
+  name: "tiramizoo"
+  url: "https://www.tiramizoo.com"
+  description: "German startup aiming to provide same-day local delivery services in Germany."
+
+- slug: "nurph"
+  name: "Nurph"
+  url: "http://nurph.com/"
+  description: "Real-time discussion platform for Twitter community."
+
+- slug: "cramlr"
+  name: "Cramlr"
+  url: "http://cramlr.com/"
+  description: "Flashcards application, part of <a href='http://www.tutoria.de'>Tutoria</a> - a&nbsp;German e-learning platform."
+
+- slug: "socialguide"
+  name: "SocialGuide"
+  url: "http://www.socialguide.com/"
+  description: "Formerly Talkwit.TV. Identifies, captures and analyzes conversation on Twitter in real-time for almost every TV program aired in U.S."
+
+- slug: "freeletics"
+  name: "Freeletics"
+  url: "http://www.freeletics.com/"
+  description: "Personalized high intensity trainings and training plans."
+
+- slug: "sharedrop"
+  name: "ShareDrop"
+  url: "https://www.sharedrop.io/"
+  description: "Open source, peer to peer file sharing application. Lets you share files with others in the same local network."

@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: http://cowbell-labs.com/sitemap.xml
