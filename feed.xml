@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Cowbell Labs Blog</title>
+  <subtitle>Our thoughts</subtitle>
+  <id>http://cowbell-labs.com/</id>
+  <link href="http://cowbell-labs.com/"/>
+  <link href="http://cowbell-labs.com/feed.xml" rel="self"/>
+  <updated>2015-01-22T01:00:00+01:00</updated>
+  <author>
+    <name>Cowbell Labs</name>
+  </author>
+  <entry>
+    <title>How to use ActiveModel errors details</title>
+    <link rel="alternate" href="http://cowbell-labs.com/2015-01-22-active-model-errors-details.html"/>
+    <id>http://cowbell-labs.com/2015-01-22-active-model-errors-details.html</id>
+    <published>2015-01-22T01:00:00+01:00</published>
+    <updated>2019-04-13T17:19:20+02:00</updated>
+    <author>
+      <name>Wojciech Wnętrzak</name>
+    </author>
+    <content type="html">&lt;p&gt;Rails just got a &lt;a href="https://github.com/rails/rails/commit/cb74473db68900d336844d840dda6e10dc03fde1"&gt;new feature&lt;/a&gt; that allows for returning the type of a validator used on an invalid attribute.&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;User&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;ActiveRecord&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Base&lt;/span&gt;
+  &lt;span class="n"&gt;validates&lt;/span&gt; &lt;span class="ss"&gt;:name&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;presence: &lt;/span&gt;&lt;span class="kp"&gt;true&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;
+
+&lt;span class="n"&gt;user&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;User&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;new&lt;/span&gt;
+&lt;span class="n"&gt;user&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;valid?&lt;/span&gt;
+&lt;span class="n"&gt;user&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;errors&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;details&lt;/span&gt;
+&lt;span class="c1"&gt;# =&amp;gt; {name: [{error: :blank}]}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;It will be useful in API applications, where you don't want to return translated error messages, but rather symbols that are then used by API clients to construct proper user notifications.&lt;/p&gt;
+
+&lt;p&gt;You can also pass additional options to provide a context for an error object:&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;User&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;ActiveRecord&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Base&lt;/span&gt;
+  &lt;span class="n"&gt;validate&lt;/span&gt; &lt;span class="ss"&gt;:adulthood&lt;/span&gt;
+
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;adulthood&lt;/span&gt;
+    &lt;span class="n"&gt;errors&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;add&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;:age&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;:too_young&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;years_limit: &lt;/span&gt;&lt;span class="mi"&gt;18&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;age&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="mi"&gt;18&lt;/span&gt;
+  &lt;span class="k"&gt;end&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;
+
+&lt;span class="n"&gt;user&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;User&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;new&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;age: &lt;/span&gt;&lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;user&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;valid?&lt;/span&gt;
+&lt;span class="n"&gt;user&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;errors&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;details&lt;/span&gt;
+&lt;span class="c1"&gt;# =&amp;gt; {age: [{error: :too_young, years_limit: 18}]}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;All built in validators populate details hash by default.&lt;/p&gt;
+
+&lt;p&gt;This feature will be available in Rails 5.0, but you don't have to wait for the release to start using it in your Rails 4.x application. All you have to do is install the &lt;a href="https://github.com/cowbell/active_model-errors_details"&gt;active_model-errors_details&lt;/a&gt; gem which backports the feature.&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Cleanup bugtracker from frequently erroring background jobs</title>
+    <link rel="alternate" href="http://cowbell-labs.com/2015-01-11-cleanup-bugtracker-from-frequently-erroring-background-jobs.html"/>
+    <id>http://cowbell-labs.com/2015-01-11-cleanup-bugtracker-from-frequently-erroring-background-jobs.html</id>
+    <published>2015-01-11T01:00:00+01:00</published>
+    <updated>2019-04-13T17:19:20+02:00</updated>
+    <author>
+      <name>Wojciech Wnętrzak</name>
+    </author>
+    <content type="html">&lt;p&gt;If you are using a background job for processing some third party service requests, you have probably noticed it happens quite often that a given service is not available 100% of the time. In such a case background job will fail with an error, reschedule itself, and finally process when the service is up again.&lt;/p&gt;
+
+&lt;p&gt;You probably also use some bugtracker service to keep an eye on status of your application. Every time when a background job fails, you are notified about the issue. You look at the error and think &lt;em&gt;"Again, cannot reach their servers, this error can be ignored"&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;This is bad – mainly because it creates a lot of noise in the bugtracker, distracting you from errors that are mission critical in your business.
+You might want to catch frequent errors in your worker and reschedule the job when an error appeared, but what is the best time of retry to use? 1 minute, 5 minutes, 30 minutes? It would be great to calculate it based on a failed attempts number. Also when rescheduling you don't know what exactly went wrong, you only see that the worker is processing something again after a period of time.&lt;/p&gt;
+
+&lt;p&gt;All of these are already handled by the background processing library, but they need to raise an error to do that, so they need to be sent to the bugtracker, so you will be distracted again. Maybe filter out these specific errors in a global notification configuration? But what about other places in your application, where a similar error might not be frequent and when it appears you want to know that?&lt;/p&gt;
+
+&lt;p&gt;There is a quite easy solution. Let's use &lt;a href="http://guides.rubyonrails.org/active_job_basics.html"&gt;ActiveJob&lt;/a&gt;, available in Rails 4.2 by default.&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;GetFacebookPictureJob&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;ActiveJob&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Base&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;perform&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;user&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;user&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;picture&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;Facebook&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;API&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;picture_url&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;user&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;facebook_id&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;user&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;save&lt;/span&gt;
+  &lt;span class="k"&gt;end&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;When Facebook servers are down, you might see errors like &lt;code&gt;OpenURI::HTTPError&lt;/code&gt; or &lt;code&gt;Errno::ENETUNREACH&lt;/code&gt;.
+To be able to not submit them to the bugtracker but still have failures handled by the background library, catch them and raise a custom error that you can filter out in a global configuration.&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;JobFrequentFailureError&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;Exception&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;end&lt;/span&gt;
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;GetFacebookPictureJob&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;ActiveJob&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Base&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;perform&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;user&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;user&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;picture&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;Facebook&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Api&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;picture_url&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;user&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;facebook_id&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;user&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;save&lt;/span&gt;
+
+  &lt;span class="k"&gt;rescue&lt;/span&gt; &lt;span class="no"&gt;Errno&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;ENETUNREACH&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="no"&gt;OpenURI&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;HTTPError&lt;/span&gt;
+    &lt;span class="k"&gt;raise&lt;/span&gt; &lt;span class="no"&gt;JobFrequentFailureError&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;new&lt;/span&gt;
+  &lt;span class="k"&gt;end&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This way, you decide which error is safe to catch in each worker.&lt;/p&gt;
+
+&lt;p&gt;There is one thing left to improve. When you look at the failure error, you will notice that its backtrace is not from the original exception.
+All you need is to update your proxy error class by using &lt;code&gt;Exception#cause&lt;/code&gt; method, available since Ruby 2.1.&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;JobFrequentFailureError&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;Exception&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;message&lt;/span&gt;
+    &lt;span class="s2"&gt;"&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="nb"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;class&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;(&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;cause&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;class&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;) - &lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;cause&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;message&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;"&lt;/span&gt;
+  &lt;span class="k"&gt;end&lt;/span&gt;
+
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;backtrace&lt;/span&gt;
+    &lt;span class="n"&gt;cause&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;backtrace&lt;/span&gt;
+  &lt;span class="k"&gt;end&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;That's it! You have a clean bugtracker and you have handled job exceptions in the best possible way.&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Capistrano deploys from Travis</title>
+    <link rel="alternate" href="http://cowbell-labs.com/2014-03-06-capistrano-deploys-from-travis.html"/>
+    <id>http://cowbell-labs.com/2014-03-06-capistrano-deploys-from-travis.html</id>
+    <published>2014-03-06T01:00:00+01:00</published>
+    <updated>2019-04-13T17:19:20+02:00</updated>
+    <author>
+      <name>Wojciech Wnętrzak</name>
+    </author>
+    <content type="html">&lt;p&gt;Travis is integrated with many services that you can &lt;a href="http://docs.travis-ci.com/user/deployment/"&gt;deploy to&lt;/a&gt; after a successful build. You may wonder however, how to do a deploy to your own server. If you are using &lt;a href="http://www.capistranorb.com/"&gt;Capistrano&lt;/a&gt;, that is a quite easy task.&lt;/p&gt;
+
+&lt;p&gt;You need to have a pair of private and public RSA keys that will be used for authentication.
+If you need to generate one, you may take a look at &lt;a href="https://help.github.com/articles/generating-ssh-keys"&gt;this article&lt;/a&gt; that will guide you through the process. Make sure to add the generated public key to &lt;code&gt;~/.ssh/authorized_keys&lt;/code&gt; file on your server.&lt;/p&gt;
+
+&lt;p&gt;Next thing you want to do is to encrypt the RSA private key, that deploy script will use to authenticate on your server. You may have heard that Travis supports &lt;a href="http://docs.travis-ci.com/user/encryption-keys/"&gt;encryption keys&lt;/a&gt;, but as for now it is impossible to encode long strings (like private RSA keys). To workaround this issue, you can add an encrypted key file to the repository and decrypt it before deployment, using a password short enough that can be handled by Travis encryption.&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="c"&gt;# Install Travis CLI tool&lt;/span&gt;
+gem install travis
+&lt;span class="c"&gt;# Authenticate to your account&lt;/span&gt;
+travis login
+&lt;span class="c"&gt;# Encrypt password and add it to .travis.yml file&lt;/span&gt;
+travis encrypt &lt;span class="nv"&gt;DEPLOY_KEY&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"encryption-password"&lt;/span&gt; &lt;span class="nt"&gt;--add&lt;/span&gt;
+&lt;span class="c"&gt;# Encrypt deploy_id_rsa private RSA key file, that will be used for deploy&lt;/span&gt;
+openssl aes-256-cbc &lt;span class="nt"&gt;-k&lt;/span&gt; &lt;span class="s2"&gt;"encryption-password"&lt;/span&gt; &lt;span class="nt"&gt;-in&lt;/span&gt; deploy_id_rsa &lt;span class="nt"&gt;-out&lt;/span&gt; config/deploy_id_rsa_enc_travis &lt;span class="nt"&gt;-a&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Add a script that will decrypt the RSA key and finally deploy your application to the server after a successful build.&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre class="highlight yaml"&gt;&lt;code&gt;&lt;span class="c1"&gt;# .travis.yml&lt;/span&gt;
+&lt;span class="na"&gt;after_success&lt;/span&gt;&lt;span class="pi"&gt;:&lt;/span&gt;
+  &lt;span class="pi"&gt;-&lt;/span&gt; &lt;span class="s2"&gt;"&lt;/span&gt;&lt;span class="s"&gt;openssl&lt;/span&gt;&lt;span class="nv"&gt; &lt;/span&gt;&lt;span class="s"&gt;aes-256-cbc&lt;/span&gt;&lt;span class="nv"&gt; &lt;/span&gt;&lt;span class="s"&gt;-k&lt;/span&gt;&lt;span class="nv"&gt; &lt;/span&gt;&lt;span class="s"&gt;$DEPLOY_KEY&lt;/span&gt;&lt;span class="nv"&gt; &lt;/span&gt;&lt;span class="s"&gt;-in&lt;/span&gt;&lt;span class="nv"&gt; &lt;/span&gt;&lt;span class="s"&gt;config/deploy_id_rsa_enc_travis&lt;/span&gt;&lt;span class="nv"&gt; &lt;/span&gt;&lt;span class="s"&gt;-d&lt;/span&gt;&lt;span class="nv"&gt; &lt;/span&gt;&lt;span class="s"&gt;-a&lt;/span&gt;&lt;span class="nv"&gt; &lt;/span&gt;&lt;span class="s"&gt;-out&lt;/span&gt;&lt;span class="nv"&gt; &lt;/span&gt;&lt;span class="s"&gt;config/deploy_id_rsa"&lt;/span&gt;
+  &lt;span class="pi"&gt;-&lt;/span&gt; &lt;span class="s2"&gt;"&lt;/span&gt;&lt;span class="s"&gt;bundle&lt;/span&gt;&lt;span class="nv"&gt; &lt;/span&gt;&lt;span class="s"&gt;exec&lt;/span&gt;&lt;span class="nv"&gt; &lt;/span&gt;&lt;span class="s"&gt;cap&lt;/span&gt;&lt;span class="nv"&gt; &lt;/span&gt;&lt;span class="s"&gt;deploy"&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Update Capistrano configuration to use your RSA key.&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="c1"&gt;# deploy.rb&lt;/span&gt;
+&lt;span class="n"&gt;set&lt;/span&gt; &lt;span class="ss"&gt;:ssh_options&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;keys: &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;"config/deploy_id_rsa"&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;exist?&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"config/deploy_id_rsa"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;If you want to deploy only the master branch, you can change the last line from &lt;code&gt;after_success&lt;/code&gt; callback.&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="o"&gt;[[&lt;/span&gt; &lt;span class="nv"&gt;$TRAVIS_BRANCH&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;'master'&lt;/span&gt; &lt;span class="o"&gt;]]&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; bundle &lt;span class="nb"&gt;exec &lt;/span&gt;cap deploy
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Commit all your changes to the repository and push it, so Travis can start a build.&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Sync your HTML slide deck in real-time with your audience using Firebase</title>
+    <link rel="alternate" href="http://cowbell-labs.com/2013-11-07-sync-your-slides-in-realtime-with-your-audience-using-firebase.html"/>
+    <id>http://cowbell-labs.com/2013-11-07-sync-your-slides-in-realtime-with-your-audience-using-firebase.html</id>
+    <published>2013-11-07T01:00:00+01:00</published>
+    <updated>2019-04-13T17:19:20+02:00</updated>
+    <author>
+      <name>Szymon Nowak</name>
+    </author>
+    <content type="html">&lt;p&gt;Recently I gave a &lt;a href="http://szimek.github.io/presentation-firebase-intro/"&gt;talk about Firebase&lt;/a&gt; and to show what can be done with it, I added real-time slide syncing in 24 lines of code including GitHub authentication for the presenter. I used &lt;a href="https://code.google.com/p/io-2012-slides/"&gt;Google IO 2012&lt;/a&gt; slide template, but it's really easy to make it work with any other HTML slide template library.&lt;/p&gt;
+
+&lt;p&gt;To broadcast slide changes you need to add &lt;code&gt;?broadcast=true&lt;/code&gt; parameter to the URL and authenticate with GitHub. To follow slide changes just add &lt;code&gt;?follow=true&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Here's the code:&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre class="highlight javascript"&gt;&lt;code&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;database&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;'presentations'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="nx"&gt;presentation&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;'firebase-intro'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="nx"&gt;url&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;'https://'&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="nx"&gt;database&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;'.firebaseio.com/'&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="nx"&gt;presentation&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="nx"&gt;ref&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="nx"&gt;Firebase&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;url&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+      &lt;span class="nx"&gt;params&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;auth&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;i&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;param&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+  &lt;span class="nx"&gt;params&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;window&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;location&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;search&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;substring&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nx"&gt;split&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'&amp;amp;'&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nx"&gt;map&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;el&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;el&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;split&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'='&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+  &lt;span class="p"&gt;});&lt;/span&gt;
+
+  &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;i&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="nx"&gt;param&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;params&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;i&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt; &lt;span class="o"&gt;++&lt;/span&gt;&lt;span class="nx"&gt;i&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;param&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;].&lt;/span&gt;&lt;span class="nx"&gt;toLowerCase&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="o"&gt;===&lt;/span&gt; &lt;span class="s1"&gt;'broadcast'&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="c1"&gt;// Authenticate using GitHub unless already authenticated&lt;/span&gt;
+      &lt;span class="nx"&gt;auth&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="nx"&gt;FirebaseSimpleLogin&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;ref&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;error&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;user&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;!&lt;/span&gt;&lt;span class="nx"&gt;user&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="nx"&gt;auth&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;login&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'github'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="na"&gt;rememberMe&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;true&lt;/span&gt; &lt;span class="p"&gt;});&lt;/span&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+      &lt;span class="p"&gt;});&lt;/span&gt;
+
+      &lt;span class="c1"&gt;// Listen to slide change event and save slide number to Firebase&lt;/span&gt;
+      &lt;span class="nb"&gt;document&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;addEventListener&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'slideenter'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;event&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="nx"&gt;ref&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="kd"&gt;set&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;event&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;slideNumber&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+      &lt;span class="p"&gt;});&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;param&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;].&lt;/span&gt;&lt;span class="nx"&gt;toLowerCase&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="o"&gt;===&lt;/span&gt; &lt;span class="s1"&gt;'follow'&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="c1"&gt;// Fetch slide number from Firebase and update the current slide&lt;/span&gt;
+      &lt;span class="nx"&gt;ref&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;on&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'value'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;snapshot&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="nb"&gt;window&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;slidedeck&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;loadSlide&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;snapshot&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;val&lt;/span&gt;&lt;span class="p"&gt;());&lt;/span&gt;
+      &lt;span class="p"&gt;});&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+  &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;})();&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Save it as &lt;code&gt;js/firebase-sync.js&lt;/code&gt; and add it together with Firebase libraries to your HTML file:&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre class="highlight html"&gt;&lt;code&gt;&lt;span class="nt"&gt;&amp;lt;script &lt;/span&gt;&lt;span class="na"&gt;src=&lt;/span&gt;&lt;span class="s"&gt;'https://cdn.firebase.com/v0/firebase.js'&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;script &lt;/span&gt;&lt;span class="na"&gt;src=&lt;/span&gt;&lt;span class="s"&gt;'https://cdn.firebase.com/v0/firebase-simple-login.js'&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;script &lt;/span&gt;&lt;span class="na"&gt;src=&lt;/span&gt;&lt;span class="s"&gt;'js/firebase-sync.js'&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;and that's it.&lt;/p&gt;
+
+&lt;p&gt;Well, almost. When you set it up for the first time, you'll need to do 2 more things.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Create a GitHub application.
+* Go to &lt;a href="https://github.com/settings/applications/new"&gt;Register a new OAuth application&lt;/a&gt; page and fill out the form. Enter &lt;code&gt;https://auth.firebase.com/auth/github/callback&lt;/code&gt; as &lt;strong&gt;Authorization callback URL&lt;/strong&gt;.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Setup your Firebase database.
+* Register to Firebase - it will automatically create your first database for you.
+* Go to "Auth" tab and in &lt;strong&gt;Authorized Request Origins&lt;/strong&gt; section add the domain where your presentation will be hosted - e.g. &lt;code&gt;&amp;lt;your GitHub username&amp;gt;.github.io&lt;/code&gt; if you'll be hosting it using GitHub Pages.
+* In &lt;strong&gt;Authentication Providers&lt;/strong&gt; click "GitHub". Check "Enabled" checkbox and copy GitHub Client ID and Secret from the application you created in the first step.
+* Go to "Security" tab and paste the following rules:&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;div class="highlight"&gt;&lt;pre class="highlight json"&gt;&lt;code&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="s2"&gt;"rules"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;".read"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="s2"&gt;".write"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"auth.provider == 'github' &amp;amp;&amp;amp; auth.username == '&amp;lt;your GitHub username&amp;gt;'"&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This will grant read access to everyone, but only you'll have write access.&lt;/p&gt;
+
+&lt;p&gt;When you open your slides for the first time with &lt;code&gt;?broadcast=true&lt;/code&gt; parameter, remember to allow pop-ups from the domain you're running it on to allow pop-up from GitHub and you're all set.&lt;/p&gt;
+
+&lt;h4 id="a-few-notes"&gt;A few notes&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;If you'd like to avoid creating a GitHub app, Firebase gives you 4 other authentication providers - email and password, Persona, Facebook and Twitter. You could simply use Persona (requires an additional JS library) or email and password provider. In the latter case just remember not to add your email and password to the repository.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;This will of course require you and your audience to have internet access, which may not be available at a conference, especially at larger ones. On the other hand it does not require you to be in the same network, so you can use your mobile phone network, if WiFi is not available.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;The free 'Development' plan allows up to 50 connections, so it might not be enough at larger conferences.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Using Twitter Bootstrap js widgets with Ember</title>
+    <link rel="alternate" href="http://cowbell-labs.com/2013-10-20-using-twitter-bootstrap-js-widgets-with-ember.html"/>
+    <id>http://cowbell-labs.com/2013-10-20-using-twitter-bootstrap-js-widgets-with-ember.html</id>
+    <published>2013-10-20T02:00:00+02:00</published>
+    <updated>2019-04-13T17:19:20+02:00</updated>
+    <author>
+      <name>Wojciech Wnętrzak</name>
+    </author>
+    <content type="html">&lt;p&gt;When starting Ember application, you may wonder where to put code that will initialize &lt;a href="http://getbootstrap.com/javascript/"&gt;Twitter Bootstrap javascript widgets&lt;/a&gt;.
+Let's say that you want to add simple &lt;a href="http://getbootstrap.com/javascript/#popovers"&gt;popover&lt;/a&gt; to your page.&lt;/p&gt;
+
+&lt;p&gt;If you put popover element into static HTML file, the best place to initialize its functionality is in your application definition on &lt;code&gt;ready&lt;/code&gt; event.&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre class="highlight javascript"&gt;&lt;code&gt;&lt;span class="nx"&gt;Ember&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;Application&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;create&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt;
+    &lt;span class="na"&gt;ready&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="nx"&gt;Ember&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;$&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;".my-popover-element"&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nx"&gt;popover&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;});&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;However, it won't work in Handlebars templates, because Ember renders dynamic HTML after &lt;code&gt;ready&lt;/code&gt; event is triggered.&lt;/p&gt;
+
+&lt;p&gt;To fix this, you may create Ember view dedicated to display popovers, where Bootstrap function is called whenever this element is inserted into the DOM on &lt;code&gt;didInsertElement&lt;/code&gt; event.&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre class="highlight javascript"&gt;&lt;code&gt;&lt;span class="nx"&gt;PopoverView&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;Ember&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;View&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;extend&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt;
+    &lt;span class="na"&gt;didInsertElement&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;$&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"button"&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nx"&gt;popover&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;});&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;You can see it in use &lt;a href="https://github.com/cowbell/bridge-points/blob/89a85d061f1ea6bb1c927ff3e5cace0aae0325bb/app/views/popover-view.coffee#L5-L6"&gt;here&lt;/a&gt;.&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Testing apps with Grunt and PhantomJS using Semaphore CI</title>
+    <link rel="alternate" href="http://cowbell-labs.com/2013-10-18-testing-apps-with-grunt-and-phantomjs-using-semaphore-ci.html"/>
+    <id>http://cowbell-labs.com/2013-10-18-testing-apps-with-grunt-and-phantomjs-using-semaphore-ci.html</id>
+    <published>2013-10-18T02:00:00+02:00</published>
+    <updated>2019-04-13T17:19:20+02:00</updated>
+    <author>
+      <name>Szymon Nowak</name>
+    </author>
+    <content type="html">&lt;p&gt;We've been using &lt;a href="https://semaphoreapp.com"&gt;Semaphore&lt;/a&gt; for continuous integration and deployment of the Ruby on Rails based API that we're currently working on and recently we've decided to use it for the frontend app as well.&lt;/p&gt;
+
+&lt;p&gt;The frontend app uses &lt;a href="http://yeoman.io"&gt;Yeoman&lt;/a&gt; workflow, so it uses &lt;a href="http://bower.io"&gt;Bower&lt;/a&gt; to install its dependencies and &lt;a href="http://gruntjs.com"&gt;Grunt&lt;/a&gt; for running tests. We've had some issues with permissions when installing dependencies on Semaphore and finally came up with these build steps:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;code&gt;mkdir /home/runner/tmp&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;sudo chown -R runner:runner /home/runner/tmp&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;sudo chown -R runner:runner /home/runner/.local&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;sudo npm install -g grunt-cli bower&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;bundle install --without deployment&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;npm install&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;bower install&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;grunt test&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The fifth step is of course optional - we're using Bundler to install compass framework, but you can simply skip it if you're not using any Ruby libraries.&lt;/p&gt;
+</content>
+  </entry>
+</feed>
